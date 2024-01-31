@@ -1,0 +1,44 @@
+pipeline {
+    agent any // You can specify a specific agent here, like 'agent { docker "maven:3-alpine" }'
+
+    stages {
+        stage('Build') {
+            steps {
+                // Define your build steps here
+                script {
+                    echo 'Building the project...'
+                    sh 'mvn clean install'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Define your test steps here
+                script {
+                    echo 'Running tests...'
+                    sh 'mvn test'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Define your deployment steps here
+                script {
+                    echo 'Deploying the application...'
+                    sh './deploy.sh'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline succeeded! Send notifications, etc.'
+        }
+        failure {
+            echo 'Pipeline failed! Send notifications, etc.'
+        }
+    }
+}
